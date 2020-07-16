@@ -7,7 +7,11 @@
 		<version>0.5.0-SNAPSHOT</version>
 	</parent>
 	<packaging>eclipse-plugin</packaging>
-	<version>0.5.9-SNAPSHOT</version>
+	<version>0.5.10-SNAPSHOT</version>
+
+	<properties>
+		<chrome-debug-adapter-versionn>4.12.8</chrome-debug-adapter-versionn>
+	</properties>
 
 	<build>
 		<plugins>
@@ -28,6 +32,7 @@
 			<plugin>
 				<groupId>com.googlecode.maven-download-plugin</groupId>
 				<artifactId>download-maven-plugin</artifactId>
+				<version>1.6.0</version>
 				<executions>
 					<execution>
 						<id>fetch-vscode</id>
@@ -41,17 +46,30 @@
 							<outputDirectory>${project.build.directory}/vscode</outputDirectory>
 						</configuration>
 					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.6.0</version>
+				<executions>
 					<execution>
-						<id>fetch-chrome-debug-adapter</id>
-						<phase>generate-resources</phase>
+						<id>local install VSCode chrome-debug-adapter extension</id>
 						<goals>
-							<goal>wget</goal>
+							<goal>exec</goal>
 						</goals>
+						<phase>generate-resources</phase>
 						<configuration>
-							<url>https://marketplace.visualstudio.com/_apis/public/gallery/publishers/msjsdiag/vsextensions/debugger-for-chrome/4.11.7/vspackage</url>
-							<outputFileName>chromeDebugAdapter.zip</outputFileName>
-							<unpack>true</unpack>
-							<outputDirectory>${project.build.directory}/chrome-debug-adapter</outputDirectory>
+							<executable>vscode/VSCode-linux-x64/bin/code</executable>
+							<arguments>
+								<arg>--install-extension</arg>
+								<arg>msjsdiag.debugger-for-chrome</arg>
+								<arg>--force</arg>
+								<arg>--verbose</arg>
+								<arg>--extensions-dir</arg>
+								<arg>vscode/VSCode-linux-x64/resources/app/extensions/</arg>
+							</arguments>
+							<workingDirectory>${project.build.directory}</workingDirectory>
 						</configuration>
 					</execution>
 				</executions>
@@ -69,7 +87,7 @@
 						<configuration>
 							<target>
 								<delete
-									file="${project.build.directory}/chrome-debug-adapter/extension/.gitignore" />
+									file="${project.build.directory}/vscode/VSCode-linux-x64/resources/app/extensions/msjsdiag.debugger-for-chrome-${chrome-debug-adapter-versionn}/.gitignore" />
 							</target>
 						</configuration>
 					</execution>
@@ -96,7 +114,7 @@
 								<arg>vscode/VSCode-linux-x64/resources/app/extensions/css-language-features/server</arg>
 								<arg>vscode/VSCode-linux-x64/resources/app/extensions/json-language-features/server</arg>
 								<arg>vscode/VSCode-linux-x64/resources/app/extensions/ms-vscode.node-debug2</arg>
-								<arg>chrome-debug-adapter/extension/</arg>
+								<arg>vscode/VSCode-linux-x64/resources/app/extensions/msjsdiag.debugger-for-chrome-${chrome-debug-adapter-versionn}</arg>
 							</arguments>
 							<workingDirectory>${project.build.directory}</workingDirectory>
 						</configuration>
@@ -116,22 +134,22 @@
 								<arg>--prefix</arg>
 								<arg>${project.basedir}</arg>
 								<arg>${project.build.directory}/node-debug2-1.42.2.tgz</arg>
-								<arg>typescript@3.8.3</arg>
+								<arg>typescript@3.9.7</arg>
 								<arg>typescript-language-server@0.4.0</arg>
 								<arg>typescript-lit-html-plugin@0.9.0</arg>
-								<arg>typescript-plugin-css-modules@2.3.0</arg>
+								<arg>typescript-plugin-css-modules@2.4.0</arg>
 								<arg>${project.build.directory}/vscode-css-languageserver-1.0.0.tgz</arg>
 								<arg>${project.build.directory}/vscode-html-languageserver-1.0.0.tgz</arg>
 								<arg>${project.build.directory}/vscode-json-languageserver-1.2.3.tgz</arg>
 								<arg>yaml-language-server@0.9.0</arg>
-								<arg>firefox-debugadapter@2.8.0</arg>
-								<arg>${project.build.directory}/debugger-for-chrome-4.11.7.tgz</arg>
+								<arg>firefox-debugadapter@2.9.0</arg>
+								<arg>${project.build.directory}/debugger-for-chrome-4.12.8.tgz</arg>
 								<arg>typescript-eslint-language-service@3.0.0</arg>
-								<arg>eslint@7.1.0</arg>
-								<arg>@typescript-eslint/eslint-plugin@3.1.0</arg>
-								<arg>@typescript-eslint/parser@3.1.0</arg>
-								<arg>@angular/language-service@9.1.9</arg>
-								<arg>@angular/language-server@0.901.9</arg>
+								<arg>eslint@7.5.0</arg>
+								<arg>@typescript-eslint/eslint-plugin@3.2.0</arg>
+								<arg>@typescript-eslint/parser@3.2.0</arg>
+								<arg>@angular/language-service@10.0.4</arg>
+								<arg>@angular/language-server@0.1000.4</arg>
 							</arguments>
 							<workingDirectory>${project.basedir}</workingDirectory>
 						</configuration>
