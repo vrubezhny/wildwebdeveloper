@@ -42,6 +42,11 @@ public class TestAngular {
 	@Test
 	public void testAngular() throws Exception {
 		IProject project = Utils.provisionTestProject("angular-app");
+		System.out.println("TestAngular.testAngular(): project: " + project);
+		System.out.println("TestAngular.testAngular(): npm: " + NodeJSManager.getNpmLocation().getAbsolutePath());
+		System.out.println("TestAngular.testAngular(): cmd: " + NodeJSManager.getNpmLocation().getAbsolutePath()
+				+ " install --no-bin-links --ignore-scripts");
+
 		Process process = new ProcessBuilder(NodeJSManager.getNpmLocation().getAbsolutePath(), "install",
 				"--no-bin-links", "--ignore-scripts").directory(project.getLocation().toFile()).start();
 		assertEquals(0, process.waitFor(), "npm install didn't complete property");
